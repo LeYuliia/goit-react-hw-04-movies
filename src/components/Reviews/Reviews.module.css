@@ -1,0 +1,22 @@
+.list {
+    display: block;
+    text-align: start;
+}
+
+.list_item {
+    margin-bottom: 40px;
+}
+
+.title {
+    margin-bottom: 20px;
+}
+
+.text {
+    margin-left: 20px;
+    padding-right: 50px;
+    text-align: justify;
+}
+
+.default {
+    font-size: 28px;
+}

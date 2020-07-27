@@ -1,0 +1,47 @@
+.list {
+    background-color: rgb(66, 66, 66);
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-self: start;
+    margin-bottom: 30px;
+}
+
+
+.link {
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.link:hover {
+    color: rgb(153, 210, 229)
+}
+
+.link:after {
+    display: block;
+    content: "";
+    height: 2px;
+    width: 0%;
+    background-color: lightblue;
+    transition: width .5s ease-in-out;
+}
+
+.link:hover:after,
+.link:focus:after {
+    width: 120%;
+}
+
+.active_link {
+    font-weight: bolder;
+    color: rgb(153, 210, 229)
+}
+
+.active_link:after {
+    display: block;
+    content: "";
+    height: 2px;
+    width: 100%;
+    background-color: lightblue;
+}
