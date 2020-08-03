@@ -19,6 +19,7 @@ const MovieDetails = lazy(() =>
   )
 );
 
+
 const App = () => (
   <>
     <AppBar />

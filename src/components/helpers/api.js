@@ -12,7 +12,7 @@ const getTranding = () => {
 const searchMovie = (query) => {
   return axios
     .get(
-      `${baseUrl}/search/movie?api_key=${key}&language=en-US&query=${query}&page=1&include_adult=false`
+      `${baseUrl}/search/movie?api_key=${key}&language=en-US&query=${query}`
     )
     .then((response) => response.data.results);
 };

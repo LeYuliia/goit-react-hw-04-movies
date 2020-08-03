@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import queryString from "query-string";
 import api from "../helpers/api.js";
 import MoviesList from "../MoviesList/MoviesList.js";
 import styles from "./MoviesPage.module.css";
@@ -6,29 +7,62 @@ import styles from "./MoviesPage.module.css";
 class MoviesPage extends Component {
   state = {
     movies: [],
+    search: "",
     submit: false,
   };
 
-  formChange = (e) => {
-    this.props.history.push({
+  getQueryParams(qs) {
+    return queryString.parse(qs);
+  }
+
+  componentDidMount() {
+    const { query } = this.getQueryParams(this.props.location.search);
+    if (query) {
+      this.setState({ search: query }, () => {
+        this.fetchMovies(query);
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { query: prevQuery } = this.getQueryParams(prevProps.location.search);
+    const { query: nextQuery } = this.getQueryParams(
+      this.props.location.search
+    );
+    if (prevQuery !== nextQuery) {
+      this.fetchMovies(nextQuery);
+    }
+  }
+
+  onChange = (e) => {
+    this.setState({
       search: e.currentTarget.value,
+      submit: false,
     });
   };
 
   formSubmit = (e) => {
     e.preventDefault();
-    this.setState({ submit: true });
-    this.fetchMovies();
-  };
-  fetchMovies = () => {
-    api
-      .searchMovie(this.props.location.search)
-      .then((result) => this.setState({ movies: result }));
+    const { history, location } = this.props;
+    history.push({
+      pathname: location.pathname,
+      search: `query=${this.state.search}`,
+    });
+    this.setState({
+      search: "",
+      submit:true,
+    });
   };
 
-  componentDidMount() {
-    this.fetchMovies();
+  fetchMovies(query) {
+    api
+      .searchMovie(query)
+      .then((result) => {
+        this.setState({ movies: result });
+      })
+      .catch((error) => this.setState({ error }));
   }
+
   render() {
     const { movies, submit } = this.state;
     return (
@@ -36,14 +70,14 @@ class MoviesPage extends Component {
         <form onSubmit={this.formSubmit} className={styles.form}>
           <input
             type="text"
-            onChange={this.formChange}
+            onChange={this.onChange}
             className={styles.texterea}
           />
           <button type="submit">Search</button>
         </form>
         {movies && <MoviesList movies={movies} />}
 
-        {movies.length === 0 && submit && (
+        {movies.length === 0 && submit &&(
           <h1>
             We couldn't find a movie :(<br></br> Try again!
           </h1>
